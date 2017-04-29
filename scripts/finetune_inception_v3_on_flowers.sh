@@ -6,8 +6,8 @@
 # 3. Evaluates the model on the Flowers validation set.
 #
 # Usage:
-# cd slim
-# ./slim/scripts/finetune_inceptionv3_on_flowers.sh
+# cd tfslim
+# ./tfslim/scripts/finetune_inceptionv3_on_flowers.sh
 
 # Where the pre-trained InceptionV3 checkpoint is saved to.
 PRETRAINED_CHECKPOINT_DIR=/tmp/checkpoints
@@ -30,12 +30,12 @@ if [ ! -f ${PRETRAINED_CHECKPOINT_DIR}/inception_v3.ckpt ]; then
 fi
 
 # Download the dataset
-python download_and_convert_data.py \
+python -m tfslim.download_and_convert_data \
   --dataset_name=flowers \
   --dataset_dir=${DATASET_DIR}
 
 # Fine-tune only the new layers for 1000 steps.
-python train_image_classifier.py \
+python -m tfslim.train_image_classifier \
   --train_dir=${TRAIN_DIR} \
   --dataset_name=flowers \
   --dataset_split_name=train \
@@ -55,7 +55,7 @@ python train_image_classifier.py \
   --weight_decay=0.00004
 
 # Run evaluation.
-python eval_image_classifier.py \
+python -m tfslim.eval_image_classifier \
   --checkpoint_path=${TRAIN_DIR} \
   --eval_dir=${TRAIN_DIR} \
   --dataset_name=flowers \
@@ -64,7 +64,7 @@ python eval_image_classifier.py \
   --model_name=inception_v3
 
 # Fine-tune all the new layers for 500 steps.
-python train_image_classifier.py \
+python -m tfslim.train_image_classifier \
   --train_dir=${TRAIN_DIR}/all \
   --dataset_name=flowers \
   --dataset_split_name=train \
@@ -82,7 +82,7 @@ python train_image_classifier.py \
   --weight_decay=0.00004
 
 # Run evaluation.
-python eval_image_classifier.py \
+python -m tfslim.eval_image_classifier \
   --checkpoint_path=${TRAIN_DIR}/all \
   --eval_dir=${TRAIN_DIR}/all \
   --dataset_name=flowers \

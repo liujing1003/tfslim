@@ -6,7 +6,7 @@
 # 3. Evaluates the model on the Cifar10 testing set.
 #
 # Usage:
-# cd slim
+# cd tfslim
 # ./scripts/train_cifar_net_on_mnist.sh
 
 # Where the checkpoint and logs will be saved to.
@@ -16,12 +16,12 @@ TRAIN_DIR=/tmp/cifarnet-model
 DATASET_DIR=/tmp/cifar10
 
 # Download the dataset
-python download_and_convert_data.py \
+python -m tfslim.download_and_convert_data \
   --dataset_name=cifar10 \
   --dataset_dir=${DATASET_DIR}
 
 # Run training.
-python train_image_classifier.py \
+python -m tfslim.train_image_classifier \
   --train_dir=${TRAIN_DIR} \
   --dataset_name=cifar10 \
   --dataset_split_name=train \
@@ -40,7 +40,7 @@ python train_image_classifier.py \
   --weight_decay=0.004
 
 # Run evaluation.
-python eval_image_classifier.py \
+python -m tfslim.eval_image_classifier \
   --checkpoint_path=${TRAIN_DIR} \
   --eval_dir=${TRAIN_DIR} \
   --dataset_name=cifar10 \
