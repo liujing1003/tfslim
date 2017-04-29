@@ -36,9 +36,9 @@ from __future__ import print_function
 
 import tensorflow as tf
 
-from datasets import download_and_convert_cifar10
-from datasets import download_and_convert_flowers
-from datasets import download_and_convert_mnist
+from tfslim.datasets import download_and_convert_cifar10
+from tfslim.datasets import download_and_convert_flowers
+from tfslim.datasets import download_and_convert_mnist
 
 FLAGS = tf.app.flags.FLAGS
 
