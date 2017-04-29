@@ -1,4 +1,12 @@
-# TensorFlow-Slim image classification library
+# Installable TensorFlow-Slim image classification library
+
+This is a slightly modified version of 
+[TF-slim](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/slim)
+were instead of having to go to the source folder to be able to execute the commands, 
+one can install it permanently on their python installation, whether it is a virtual environment
+or not. Nothing in the main code was changed, only few import statements.
+
+## Introduction
 
 [TF-slim](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/slim)
 is a new lightweight high-level API of TensorFlow (`tensorflow.contrib.slim`)
@@ -55,24 +63,34 @@ To use TF-Slim for image classification, you also have to install
 the [TF-Slim image models library](https://github.com/tensorflow/models/tree/master/slim),
 which is not part of the core TF library.
 To do this, check out the
-[tensorflow/models](https://github.com/tensorflow/models/) repository as follows:
+[tensorflow/models](https://github.com/ModarTensai/tfslim/) repository as follows:
 
 ```bash
-cd $HOME/workspace
-git clone https://github.com/tensorflow/models/
+cd PYTHON_SITE_PACKAGES_DIRECTORY
+git clone https://github.com/ModarTensai/tfslim/
 ```
 
-This will put the TF-Slim image models library in `$HOME/workspace/models/slim`.
-(It will also create a directory called
-[models/inception](https://github.com/tensorflow/models/tree/master/inception),
-which contains an older version of slim; you can safely ignore this.)
+where `PYTHON_SITE_PACKAGES_DIRECTORY` is user specific and it can be in one of the following
+
+```bash
+/usr/lib/pythonX.X/site-packages
+/usr/lib/pythonX.X/dist-packages
+minicondaX/envs/ENVIRONMENT_NAME/lib/pythonX.X/site-packages
+```
+
+or better use the following in your python to find it
+
+```python
+import site; 
+directories = site.getsitepackages()
+print(directories)
+```
 
 To verify that this has worked, execute the following commands; it should run
 without raising any errors.
 
 ```
-cd $HOME/workspace/models/slim
-python -c "from nets import cifarnet; mynet = cifarnet.cifarnet"
+python -c "from tfslim.nets import cifarnet; mynet = cifarnet.cifarnet"
 ```
 
 
@@ -100,7 +118,7 @@ protocol buffer. Below we demonstrate how to do this for the Flowers dataset.
 
 ```shell
 $ DATA_DIR=/tmp/data/flowers
-$ python download_and_convert_data.py \
+$ python -m tfslim.download_and_convert_data \
     --dataset_name=flowers \
     --dataset_dir="${DATA_DIR}"
 ```
@@ -149,7 +167,7 @@ is found below:
 
 ```python
 import tensorflow as tf
-from datasets import flowers
+from tfslim.datasets import flowers
 
 slim = tf.contrib.slim
 
@@ -232,7 +250,7 @@ parameters on the ImageNet dataset.
 ```shell
 DATASET_DIR=/tmp/imagenet
 TRAIN_DIR=/tmp/train_logs
-python train_image_classifier.py \
+python -m tfslim.train_image_classifier \
     --train_dir=${TRAIN_DIR} \
     --dataset_name=imagenet \
     --dataset_split_name=train \
@@ -289,7 +307,7 @@ the new layers.
 $ DATASET_DIR=/tmp/flowers
 $ TRAIN_DIR=/tmp/flowers-models/inception_v3
 $ CHECKPOINT_PATH=/tmp/my_checkpoints/inception_v3.ckpt
-$ python train_image_classifier.py \
+$ python -m tfslim.train_image_classifier \
     --train_dir=${TRAIN_DIR} \
     --dataset_dir=${DATASET_DIR} \
     --dataset_name=flowers \
@@ -313,7 +331,7 @@ evaluating it on the imagenet dataset.
 
 ```shell
 CHECKPOINT_FILE = ${CHECKPOINT_DIR}/inception_v3.ckpt  # Example
-$ python eval_image_classifier.py \
+$ python -m tfslim.eval_image_classifier \
     --alsologtostderr \
     --checkpoint_path=${CHECKPOINT_FILE} \
     --dataset_dir=${DATASET_DIR} \
